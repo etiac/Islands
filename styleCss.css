@@ -1,0 +1,23 @@
+.inputD{
+    color: skyblue;
+    font-weight: normal;
+    align-self: center;
+    font-size: 14;
+    font-family: cursive;
+    margin-left: 95px;
+    margin-bottom: 5px;
+}
+.controlLabel{
+    color: lightblue;
+    font-family: cursive;
+}
+.inputDiv{
+    padding-left: 35%;
+   
+}
+.button{
+    background-color: lightblue;
+    text-decoration-color: darkblue;
+    margin-left: 25px;
+    font-family: cursive;
+}
