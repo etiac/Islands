@@ -9,8 +9,6 @@
     <script src="gridCtrl.js"></script>
     
     <div ng-app="myApp" ng-controller="gridCtrl">
-        <p>{{isForm}}</p>
-        <p>mode {{appMode}}</p>
         <div class="inputDiv" ng-show="{{isForm=='form1'}}">
           
           <h1 class="controlLabel">Please Enter bitmap size</h1>
@@ -25,12 +23,14 @@
             
              
         </div>
-        <table style="margin-left: 70px;border: 1px;border-color: aquamarine;">
-          <tr ng-repeat="row in grid" style="line-height: 5px; column-width: 5px;">
-            <td ng-repeat="cell in row" style="line-height: 5px; column-width: 5px;border-color: black; border: 1px; background-color: {{cell.htmlColor}}"> </td>
-          </tr>
-        </table>
-        
+        <div>
+            <h3 class="controlLabel" style="text-align: center">Number of islands {{numberOfIsland}} </h3>
+            <table style="margin-left: 70px;border: 1px;border-color: aquamarine;">
+              <tr ng-repeat="row in grid" style="line-height: 7px; column-width: 5px;">
+                <td ng-repeat="cell in row" style="line-height: 7px; column-width: 5px;border-color: black; border: 1px; background-color: {{cell.htmlColor}}"> </td>
+              </tr>
+            </table>
+        </div>
         
 <!--
         <div ng-show="{{isForm=='form2'}}">
