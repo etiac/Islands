@@ -26,6 +26,7 @@ app.controller('gridCtrl', function($scope, gridDataSrv) {
     
     $scope.solveIslands = function() {
         $scope.appMode = "solve";
+        $scope.numberOfIsland = gridDataSrv.findIslands();
     };
     
     $scope.bonusLevel = function(){

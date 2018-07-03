@@ -18,18 +18,26 @@
           <input class="inputD" type="number" ng-model="mD" placeholder="Enter M here" required > <br>
             
           <button class="button" ng-click="drawBitMap()">DRAW</button>
-          <button class="button" ng-click="randomizeMap()">RANDOMIZE</button> <br>
+          <button class="button" ng-click="randomizeMap()">RANDOMIZE</button> 
+          <button class="button" ng-click="solveIslands()">SOLVE</button>
+            
+            
+            
              
         </div>
-        <table style="margin-left: 70px">
-          <tr ng-repeat="row in grid">
-            <td ng-repeat="cell in row">{{ cell.color }}</td>
+        <table style="margin-left: 70px;border: 1px;border-color: aquamarine;">
+          <tr ng-repeat="row in grid" style="line-height: 5px; column-width: 5px;">
+            <td ng-repeat="cell in row" style="line-height: 5px; column-width: 5px;border-color: black; border: 1px; background-color: {{cell.htmlColor}}"> </td>
           </tr>
         </table>
+        
+        
+<!--
         <div ng-show="{{isForm=='form2'}}">
             <h2>Form2</h2>
             <button class="button" ng-click="solveIslands()">SOLVE</button>
         </div>
+-->
     </div>
       
       
