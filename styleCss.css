@@ -20,4 +20,16 @@
     text-decoration-color: darkblue;
     margin-left: 25px;
     font-family: cursive;
+    
+}
+
+table, th , td {
+    align: center;
+    border: 1px solid grey;
+    border-collapse: collapse;
+    height: 6px;
+}
+
+td{
+    column-width: 6px;
 }

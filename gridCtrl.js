@@ -1,36 +1,53 @@
 app.controller('gridCtrl', function($scope, gridDataSrv) {
-    $scope.isForm = "form1";
+
     $scope.appMode = "start";
-    $scope.bitMapStr = "";
+    $scope.numberOfIsland = 0;
+//    $scope.bitMapStr = "";
     
     $scope.drawBitMap = function(){
-        $scope.appMode = "draw";
-        $scope.isForm = "form2";
-        $scope.grid = gridDataSrv.initBitMap($scope.nD, $scope.mD);
-        $scope.appMode = "iniidated";
-    };
-    
-    $scope.printBitMap = function(){
-      $scope.bitMapStr = "";
-      for (var row = 0; row<$scope.mD; row++){
-          for (var col =0; col < $scope.nD; col++){
-              $scope.bitMapStr += $scope.grid[row][col].color + " ";
-          }
-          $scope.bitMapStr += "\n";
-      }  
+        $scope.grid = gridDataSrv.initBitMap($scope.mD, $scope.nD);
     };
     
     $scope.randomizeMap = function(){
+        $scope.drawBitMap();
         $scope.grid = gridDataSrv.initIslands();
+        $scope.appMode = "solve";
     };
     
     $scope.solveIslands = function() {
-        $scope.appMode = "solve";
         $scope.numberOfIsland = gridDataSrv.findIslands();
     };
     
     $scope.bonusLevel = function(){
-        $scopeMode = "bonus";
+        $scope.appMode = "bonus";
+        $scope.drawBitMap();
     };
     
+    $scope.flipCell = function(row, col){
+        $scope.grid = gridDataSrv.flipBit(row, col);
+    };
+    
+    $scope.solveBonus = function(){
+      gridDataSrv.updateNeighbor();
+      $scope.numberOfIsland = gridDataSrv.findIslands();
+    };
+    
+    
+    $scope.backFromBonus = function(){
+      $scope.numberOfIsland = 0;
+      $scope.mD = '';
+      $scope.nD = '';
+      $scope.appMode = "start";
+    };
+    
+        
+//    $scope.printBitMap = function(){
+//      $scope.bitMapStr = "";
+//      for (var row = 0; row<$scope.mD; row++){
+//          for (var col =0; col < $scope.nD; col++){
+//              $scope.bitMapStr += $scope.grid[row][col].color + " ";
+//          }
+//          $scope.bitMapStr += "\n";
+//      }  
+//    };
 });

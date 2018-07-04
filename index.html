@@ -9,39 +9,41 @@
     <script src="gridCtrl.js"></script>
     
     <div ng-app="myApp" ng-controller="gridCtrl">
-        <div class="inputDiv" ng-show="{{isForm=='form1'}}">
+        <div class="inputDiv" ng-show="appMode == 'start'">
           
           <h1 class="controlLabel">Please Enter bitmap size</h1>
           <input  class="inputD" type="number" ng-model="nD" placeholder="Enter N here"  required > <br>
           <input class="inputD" type="number" ng-model="mD" placeholder="Enter M here" required > <br>
             
-          <button class="button" ng-click="drawBitMap()">DRAW</button>
-          <button class="button" ng-click="randomizeMap()">RANDOMIZE</button> 
-          <button class="button" ng-click="solveIslands()">SOLVE</button>
-            
-            
-            
-             
+<!--          <button class="button" ng-click="drawBitMap()">DRAW</button>-->
+          <button class="button" ng-click="randomizeMap()">RANDOMIZE</button>
+          <button class="button" ng-click="bonusLevel()">BONUS</button>
         </div>
-        <div>
+        
+        <div class="inputDiv" ng-show="appMode == 'solve'">
+            
             <h3 class="controlLabel" style="text-align: center">Number of islands {{numberOfIsland}} </h3>
-            <table style="margin-left: 70px;border: 1px;border-color: aquamarine;">
-              <tr ng-repeat="row in grid" style="line-height: 7px; column-width: 5px;">
-                <td ng-repeat="cell in row" style="line-height: 7px; column-width: 5px;border-color: black; border: 1px; background-color: {{cell.htmlColor}}"> </td>
+            <button class="button" ng-click="solveIslands()">SOLVE</button>
+            <button class="button" ng-click="backFromBonus()">BACK</button>
+            <table class="table" style=>
+              <tr  class="tr" ng-repeat="row in grid" >
+                <td class="td" ng-repeat="cell in row" style="background-color: {{cell.htmlColor}}"  data-ng-click="flipCell(cell)"> </td>
               </tr>
             </table>
         </div>
         
-<!--
-        <div ng-show="{{isForm=='form2'}}">
-            <h2>Form2</h2>
-            <button class="button" ng-click="solveIslands()">SOLVE</button>
+        <div ng-show="appMode == 'bonus'">
+            <h3 class="controlLabel" style="text-align: center">Number of islands {{numberOfIsland}} </h3>
+            <button class="button" ng-click="solveBonus()">SOLVE</button>
+            <button class="button" ng-click="backFromBonus()">BACK</button>
+            <table class="table" >
+              <tr  class="tr" ng-repeat="row in grid" >
+                <td  class="td" ng-repeat="cell in row" ng-click="flipCell(cell.row, cell.col)" style="background-color: {{cell.htmlColor}}"> </td>
+              </tr>
+            </table>
         </div>
--->
+
     </div>
-      
-      
-    
-    
+
   </body>
 </html>

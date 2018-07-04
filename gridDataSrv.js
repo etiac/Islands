@@ -17,6 +17,7 @@ var app = angular.module('myApp', []);
         for (var row = 0; row < this.mD; row++){
             this.grid[row] = new Array(this.nD);
             for (var col = 0; col < this.nD; col++){
+                
                 this.grid[row][col] = Bit(row,col);
             }
         }
@@ -38,27 +39,32 @@ var app = angular.module('myApp', []);
             }
         }
         
-        //update black neighbors only for balck cells - if my neighbor is black but im not - it's not relevant for me
+        this.updateNeighbor();
+        
+        return this.grid;
+    }
+    
+    this.updateNeighbor = function(){
+         //update black neighbors only for balck cells - if my neighbor is black but im not - it's not relevant for me
         for (var row =0; row < this.mD; row++){
             for (var col =0; col < this.nD; col++){
                 if (this.grid[row][col].bit == 1){ 
-                    this.updateNeighbors(row, col, row-1, col-1);
-                    this.updateNeighbors(row, col, row-1, col);
-                    this.updateNeighbors(row, col, row-1, col+1);
+                    this.updateNeighborsArray(row, col, row-1, col-1);
+                    this.updateNeighborsArray(row, col, row-1, col);
+                    this.updateNeighborsArray(row, col, row-1, col+1);
                     
-                    this.updateNeighbors(row, col, row, col-1);
-                    this.updateNeighbors(row, col, row, col+1);
+                    this.updateNeighborsArray(row, col, row, col-1);
+                    this.updateNeighborsArray(row, col, row, col+1);
                     
-                    this.updateNeighbors(row, col, row+1, col-1);
-                    this.updateNeighbors(row, col, row+1, col);
-                    this.updateNeighbors(row, col, row+1, col+1);
+                    this.updateNeighborsArray(row, col, row+1, col-1);
+                    this.updateNeighborsArray(row, col, row+1, col);
+                    this.updateNeighborsArray(row, col, row+1, col+1);
                 }
             }
         }
-        return this.grid;
     }
         
-    this.updateNeighbors = function(row, col, neighborRow, neighborCol){
+    this.updateNeighborsArray = function(row, col, neighborRow, neighborCol){
         if (neighborRow >= 0 && neighborRow < this.mD 
             && neighborCol >= 0 && neighborCol < this.nD
             && this.grid[neighborRow][neighborCol].bit == 1){
@@ -114,6 +120,19 @@ var app = angular.module('myApp', []);
         }
         return color;
     }
+    
+    this.flipBit = function(row, col){
+        if (this.grid[row][col].bit == 0){
+            this.grid[row][col].bit = 1;
+            this.grid[row][col].htmlColor = 'black';
+        }else{  //bit is 1
+            this.grid[row][col].bit = 0;
+            this.grid[row][col].htmlColor = 'white';
+        }
+        return this.grid;
+    }
+    
+  
     
     
 });
