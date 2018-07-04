@@ -5,10 +5,10 @@ var app = angular.module('myApp', []);
     this.mD = 0;
         
     //creat bit object without color    
-    function Bit(i,j) {
-        var bit = {bit : 0, htmlColor: 'white', row : i, col : j, coloredConnectedNeighbors : [] };
-        return bit;
-    }
+//    function Bit(i,j) {
+//        var bit = {bit : 0, htmlColor: 'white', row : i, col : j, coloredConnectedNeighbors : [] };
+//        return bit;
+//    }
         
     //creat a bit object for a selected bit value
     function Bit(i,j, bitVal, color) {
@@ -25,7 +25,7 @@ var app = angular.module('myApp', []);
             this.grid[row] = new Array(this.nD);
             for (var col = 0; col < this.nD; col++){
                 
-                this.grid[row][col] = Bit(row,col);
+                this.grid[row][col] = Bit(row,col, 0, 'white');
             }
         }
         return this.grid;  
