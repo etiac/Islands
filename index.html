@@ -15,28 +15,30 @@
           <input  class="inputD" type="number" ng-model="nD" placeholder="Enter N here"  required > <br>
           <input class="inputD" type="number" ng-model="mD" placeholder="Enter M here" required > <br>
             
-<!--          <button class="button" ng-click="drawBitMap()">DRAW</button>-->
           <button class="button" ng-click="randomizeMap()">RANDOMIZE</button>
           <button class="button" ng-click="bonusLevel()">BONUS</button>
         </div>
         
         <div class="inputDiv" ng-show="appMode == 'solve'">
+            <br><br>
+            <button class="button" ng-disabled="disableSolved" ng-click="solveIslands()">SOLVE</button>
+            <button class="button" ng-click="backFromBonus()">BACK</button> <br>
+            <h1 class="controlLabel" style="text-align: center">Number of islands {{numberOfIsland}} </h1><br>
             
-            <h3 class="controlLabel" style="text-align: center">Number of islands {{numberOfIsland}} </h3>
-            <button class="button" ng-click="solveIslands()">SOLVE</button>
-            <button class="button" ng-click="backFromBonus()">BACK</button>
-            <table class="table" style=>
+            <table class="table" align="center">
               <tr  class="tr" ng-repeat="row in grid" >
                 <td class="td" ng-repeat="cell in row" style="background-color: {{cell.htmlColor}}"  data-ng-click="flipCell(cell)"> </td>
               </tr>
             </table>
         </div>
         
-        <div ng-show="appMode == 'bonus'">
-            <h3 class="controlLabel" style="text-align: center">Number of islands {{numberOfIsland}} </h3>
-            <button class="button" ng-click="solveBonus()">SOLVE</button>
-            <button class="button" ng-click="backFromBonus()">BACK</button>
-            <table class="table" >
+        <div class="inputDiv" ng-show="appMode == 'bonus'">
+            <br><br>
+            <button class="button" ng-click="solveBonus()" ng-disabled="disableSolved">SOLVE</button>
+            <button class="button" ng-click="backFromBonus()">BACK</button> <br>
+            <h1 class="controlLabel" style="text-align: center">Number of islands {{numberOfIsland}} </h1> <br>
+            
+            <table class="table" align="center">
               <tr  class="tr" ng-repeat="row in grid" >
                 <td  class="td" ng-repeat="cell in row" ng-click="flipCell(cell.row, cell.col)" style="background-color: {{cell.htmlColor}}"> </td>
               </tr>

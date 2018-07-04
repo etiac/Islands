@@ -2,6 +2,7 @@ app.controller('gridCtrl', function($scope, gridDataSrv) {
 
     $scope.appMode = "start";
     $scope.numberOfIsland = 0;
+    $scope.disableSolved = false;
 //    $scope.bitMapStr = "";
     
     $scope.drawBitMap = function(){
@@ -16,6 +17,7 @@ app.controller('gridCtrl', function($scope, gridDataSrv) {
     
     $scope.solveIslands = function() {
         $scope.numberOfIsland = gridDataSrv.findIslands();
+        $scope.disableSolved = true;
     };
     
     $scope.bonusLevel = function(){
@@ -24,12 +26,16 @@ app.controller('gridCtrl', function($scope, gridDataSrv) {
     };
     
     $scope.flipCell = function(row, col){
+        if ($scope.disableSolved){
+            return;
+        }
         $scope.grid = gridDataSrv.flipBit(row, col);
     };
     
     $scope.solveBonus = function(){
       gridDataSrv.updateNeighbor();
       $scope.numberOfIsland = gridDataSrv.findIslands();
+      $scope.disableSolved = true;
     };
     
     
@@ -37,6 +43,7 @@ app.controller('gridCtrl', function($scope, gridDataSrv) {
       $scope.numberOfIsland = 0;
       $scope.mD = '';
       $scope.nD = '';
+      $scope.disableSolved = false;
       $scope.appMode = "start";
     };
     
