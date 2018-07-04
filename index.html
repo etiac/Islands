@@ -12,11 +12,17 @@
         <div class="inputDiv" ng-show="appMode == 'start'">
           
           <h1 class="controlLabel">Please Enter bitmap size</h1>
-          <input  class="inputD" type="number" ng-model="nD" placeholder="Enter N here"  required > <br>
-          <input class="inputD" type="number" ng-model="mD" placeholder="Enter M here" required > <br>
+          <input  class="inputD" type="number" ng-model="nD" ng-change="onChangedInput()" placeholder="Enter N here"  required > <br>
+          <input class="inputD" type="number" ng-model="mD" ng-change="onChangedInput()" placeholder="Enter M here" required > <br>
+          <p ng-show="showError" style="font-family: cursive; color: red">Invalid input: only positive numbers bigger than 0 are accepted</p>
             
-          <button class="button" ng-click="randomizeMap()">RANDOMIZE</button>
-          <button class="button" ng-click="bonusLevel()">BONUS</button>
+          <button class="button" ng-disabled="disableStartButtons" ng-click="randomizeMap()">RANDOMIZE</button>
+          <button class="button" ng-disabled="disableStartButtons" ng-click="bonusLevel()">BONUS</button>
+            
+          <div ng-show="loading">
+              <img src="loadingCat.gif"  />
+          </div>
+            
         </div>
         
         <div class="inputDiv" ng-show="appMode == 'solve'">
@@ -24,8 +30,11 @@
             <button class="button" ng-disabled="disableSolved" ng-click="solveIslands()">SOLVE</button>
             <button class="button" ng-click="backFromBonus()">BACK</button> <br>
             <h1 class="controlLabel" style="text-align: center">Number of islands {{numberOfIsland}} </h1><br>
+            <div ng-show="loading">
+              <img src="loadingCat.gif"  />
+            </div>
             
-            <table class="table" align="center">
+            <table class="table" align="center" ng-show="!loading">
               <tr  class="tr" ng-repeat="row in grid" >
                 <td class="td" ng-repeat="cell in row" style="background-color: {{cell.htmlColor}}"  data-ng-click="flipCell(cell)"> </td>
               </tr>
@@ -38,7 +47,11 @@
             <button class="button" ng-click="backFromBonus()">BACK</button> <br>
             <h1 class="controlLabel" style="text-align: center">Number of islands {{numberOfIsland}} </h1> <br>
             
-            <table class="table" align="center">
+            <div ng-show="loading">
+              <img src="loadingCat.gif"  />
+            </div>
+            
+            <table class="table" align="center" ng-show="!loading">
               <tr  class="tr" ng-repeat="row in grid" >
                 <td  class="td" ng-repeat="cell in row" ng-click="flipCell(cell.row, cell.col)" style="background-color: {{cell.htmlColor}}"> </td>
               </tr>
