@@ -35,8 +35,8 @@
             </div>
             
             <table class="table" align="center" ng-show="!loading">
-              <tr  class="tr" ng-repeat="row in grid" >
-                <td class="td" ng-repeat="cell in row" style="background-color: {{cell.htmlColor}}"  data-ng-click="flipCell(cell)"> </td>
+              <tr  class="tr" ng-repeat="row in  rowIndex" >
+                <td class="td" ng-repeat="col in colIndex" style="background-color: {{getCellColor(row, col)}}" > </td>
               </tr>
             </table>
         </div>
@@ -51,8 +51,9 @@
               <img src="loadingCat.gif"  />
             </div>
             
-            <table class="table" align="center" ng-show="!loading">
-              <tr  class="tr" ng-repeat="row in grid" >
+            <table class="table" align="center" ng-show="!loading" >
+              <tr  class="tr" ng-repeat="row in gridBonus" >
+                  
                 <td  class="td" ng-repeat="cell in row" ng-click="flipCell(cell.row, cell.col)" style="background-color: {{cell.htmlColor}}"> </td>
               </tr>
             </table>

@@ -6,10 +6,9 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
     $scope.disableStartButtons = true;
     $scope.showError = false;
     $scope.loading = false;
+//    $scope.gridBonus = {};
     
-    $scope.drawBitMap = function(){
-        $scope.grid = gridDataSrv.initBitMap($scope.mD, $scope.nD);
-    };
+    
     
     //check the n and m input
     $scope.onChangedInput = function(){
@@ -27,14 +26,25 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
     //create random map with black islands on it
     $scope.randomizeMap = function(){
         $scope.loading = true;
+        $scope.colIndex = new Array(this.nD);
+            for (var j = 0; j < this.nD; j++){
+                $scope.colIndex[j] = j;
+            }
+            $scope.rowIndex = new Array(this.mD);
+            for (var i =0; i < this.mD; i++){
+                $scope.rowIndex[i] = i;
+            }
         $timeout(function () { // to be able to show a loading gif while waiting for the map to be build
+            
             $scope.grid = gridDataSrv.initIslands($scope.mD, $scope.nD);
             $scope.$emit("loaded");
         },50);
         
         $scope.$on("loaded", function () {
             $scope.loading = false; 
-            $scope.appMode = "solve"; })
+            $scope.appMode = "solve"; 
+
+        })
     };
     
     //solve islands for the random map
@@ -42,6 +52,7 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
         $scope.loading = true;
         $timeout(function () {
             $scope.numberOfIsland = gridDataSrv.findIslands();
+            $scope.grid = gridDataSrv.getUpdatedGrid();
             $scope.$emit("loadedSolve");
         },50);
         
@@ -50,17 +61,30 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
         $scope.disableSolved = true;})
     };
     
+    
+    //get color - verify if the cell exists before.... if not return white
+    $scope.getCellColor = function(row, col){
+        if ($scope.loading)
+            return 'white';
+        if ($scope.grid[row] == undefined || $scope.grid[row][col] == undefined){
+            return 'white'
+        }
+        return $scope.grid[row][col].htmlColor;
+    };
+    
+    //*************************** Bonus *****************************
+    
     //draw the map for the bonus view
     $scope.bonusLevel = function(){
         $scope.appMode = "bonus";
         $scope.loading = true;
         $timeout(function () {
-            $scope.drawBitMap();
+            $scope.gridBonus = gridDataSrv.initBitMap($scope.mD, $scope.nD);
             $scope.$emit("loadedBonus");
         },50);
         
         $scope.$on("loadedBonus", function () {
-        $scope.loading = false;  })
+        $scope.loading = false; })
             
     };
     
@@ -69,7 +93,7 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
         if ($scope.disableSolved){
             return;
         }
-        $scope.grid = gridDataSrv.flipBit(row, col);
+        $scope.gridBonus = gridDataSrv.flipBit(row, col);
     };
     
     
@@ -77,15 +101,21 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
     $scope.solveBonus = function(){
         $scope.loading = true;
         $timeout(function () {
-            gridDataSrv.updateNeighbor();
+//            gridDataSrv.updateNeighbor();
             $scope.numberOfIsland = gridDataSrv.findIslands();
+            
             $scope.$emit("loadedSolveBonus");
         },50);
         
         $scope.$on("loadedSolveBonus", function () {
         $scope.loading = false;
-        $scope.disableSolved = true; })
+        $scope.disableSolved = true; 
+        $scope.gridBonus = gridDataSrv.getUpdatedGrid();
+        })
     };
+    
+    
+    //******************************************* Bonus End ************************************
     
     //back button 
     $scope.backFromBonus = function(){
@@ -97,5 +127,11 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
         $scope.loading = false;
         $scope.appMode = "start";
     };
+    
+    
+    
+   
+    
+    
     
 });
