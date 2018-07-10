@@ -6,9 +6,7 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
     $scope.disableStartButtons = true;
     $scope.showError = false;
     $scope.loading = false;
-//    $scope.gridBonus = {};
-    
-    
+
     
     //check the n and m input
     $scope.onChangedInput = function(){
@@ -26,14 +24,11 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
     //create random map with black islands on it
     $scope.randomizeMap = function(){
         $scope.loading = true;
-        $scope.colIndex = new Array(this.nD);
-            for (var j = 0; j < this.nD; j++){
-                $scope.colIndex[j] = j;
-            }
-            $scope.rowIndex = new Array(this.mD);
-            for (var i =0; i < this.mD; i++){
-                $scope.rowIndex[i] = i;
-            }
+        
+        $scope.rowIndex = new Array(this.mD);
+        for (var i =0; i < this.mD; i++){
+            $scope.rowIndex[i] = i;
+        }
         $timeout(function () { // to be able to show a loading gif while waiting for the map to be build
             
             $scope.grid = gridDataSrv.initIslands($scope.mD, $scope.nD);
@@ -52,7 +47,6 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
         $scope.loading = true;
         $timeout(function () {
             $scope.numberOfIsland = gridDataSrv.findIslands();
-            $scope.grid = gridDataSrv.getUpdatedGrid();
             $scope.$emit("loadedSolve");
         },50);
         
@@ -66,8 +60,11 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
     $scope.getCellColor = function(row, col){
         if ($scope.loading)
             return 'white';
-        if ($scope.grid[row] == undefined || $scope.grid[row][col] == undefined){
-            return 'white'
+//        if ($scope.grid[row] == undefined || $scope.grid[row][col] == undefined){
+//            return 'white'
+//        }
+        if ($scope.grid[row][col] == undefined){
+            return 'white';
         }
         return $scope.grid[row][col].htmlColor;
     };
@@ -78,8 +75,12 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
     $scope.bonusLevel = function(){
         $scope.appMode = "bonus";
         $scope.loading = true;
+        $scope.rowIndex = new Array(this.mD);
+        for (var i =0; i < this.mD; i++){
+            $scope.rowIndex[i] = i;
+        }
         $timeout(function () {
-            $scope.gridBonus = gridDataSrv.initBitMap($scope.mD, $scope.nD);
+            $scope.grid = gridDataSrv.initBitMap($scope.mD, $scope.nD);
             $scope.$emit("loadedBonus");
         },50);
         
@@ -93,7 +94,7 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
         if ($scope.disableSolved){
             return;
         }
-        $scope.gridBonus = gridDataSrv.flipBit(row, col);
+        $scope.grid = gridDataSrv.flipBit(row, col);
     };
     
     
@@ -101,7 +102,7 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
     $scope.solveBonus = function(){
         $scope.loading = true;
         $timeout(function () {
-//            gridDataSrv.updateNeighbor();
+
             $scope.numberOfIsland = gridDataSrv.findIslands();
             
             $scope.$emit("loadedSolveBonus");
@@ -110,7 +111,7 @@ app.controller('gridCtrl', function($scope, gridDataSrv, $timeout) {
         $scope.$on("loadedSolveBonus", function () {
         $scope.loading = false;
         $scope.disableSolved = true; 
-        $scope.gridBonus = gridDataSrv.getUpdatedGrid();
+//        $scope.gridBonus = gridDataSrv.getUpdatedGrid();
         })
     };
     

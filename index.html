@@ -19,7 +19,7 @@
           <button class="button" ng-disabled="disableStartButtons" ng-click="randomizeMap()">RANDOMIZE</button>
           <button class="button" ng-disabled="disableStartButtons" ng-click="bonusLevel()">BONUS</button>
             
-          <div ng-show="loading">
+          <div ng-show="loading">       
               <img src="loadingCat.gif"  />
           </div>
             
@@ -35,8 +35,8 @@
             </div>
             
             <table class="table" align="center" ng-show="!loading">
-              <tr  class="tr" ng-repeat="row in  rowIndex" >
-                <td class="td" ng-repeat="col in colIndex" style="background-color: {{getCellColor(row, col)}}" > </td>
+              <tr  class="tr" ng-repeat="row in rowIndex">    <!--[].constructor(mD) track by $index">-->
+                <td class="td" ng-repeat="_ in ((_ = []) && (_.length=nD) && _) track by $index" style="background-color: {{getCellColor(row, $index)}}" > </td>
               </tr>
             </table>
         </div>
@@ -52,9 +52,14 @@
             </div>
             
             <table class="table" align="center" ng-show="!loading" >
+<!--
               <tr  class="tr" ng-repeat="row in gridBonus" >
-                  
                 <td  class="td" ng-repeat="cell in row" ng-click="flipCell(cell.row, cell.col)" style="background-color: {{cell.htmlColor}}"> </td>
+              </tr>
+-->
+                <tr  class="tr" ng-repeat="row in rowIndex">    <!--[].constructor(mD) track by $index">-->
+                    <td class="td" ng-repeat="_ in ((_ = []) && (_.length=nD) && _) track by $index" ng-click="flipCell(row, $index)" 
+                        style="background-color: {{getCellColor(row, $index)}}" > </td>
               </tr>
             </table>
         </div>

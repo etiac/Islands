@@ -18,28 +18,10 @@ var app = angular.module('myApp', []);
         this.grid = new Array(this.mD); 
         for (var row = 0; row < this.mD; row++){
             this.grid[row] = new Array(this.nD);
-            for (var col = 0; col < this.nD; col++){
-                
-                this.grid[row][col] = Bit(row,col, 0, 'white');
-            }
+            
         }
         return this.grid;  
     }
-    
-//    this.buildHtmlTable = function(){
-//        this.htmlTable = "";
-//        for (var row =0; row< this.mD; row++){
-//            this.htmlTable += "<tr  class='tr'>";
-//            for (var col = 0; col < this.nD; col++){
-//                if (this.grid[0][col] == undefined){
-//                    this.htmlTable += "<td class='td' style='background-color: white'></td>"
-//                }
-//            }
-//            this.htmlTable += "</tr>";
-//        }
-//                 
-//        return this.htmlTable;
-//    }
     
 
     //init the bit map for the random mode - in order to reduce run time - while creating the map select the color for each cell
@@ -51,7 +33,7 @@ var app = angular.module('myApp', []);
         for (var row =0; row < this.mD; row++){
             this.grid[row] = new Array(this.nD); 
 
-            var numOfRandom = Math.floor((Math.random()*this.nD)/5 + 1);
+            var numOfRandom = Math.floor((Math.random()*this.nD)/6 + 2);
             
             for (var i = 0; i < numOfRandom; i++){
                 
@@ -61,16 +43,7 @@ var app = angular.module('myApp', []);
                     this.grid[row][col] = Bit(row, col, 1, 'black');
                     this.updateNeighborForOneCell(row, col);  // need to be adjusted
                 }
-                else if (col>0 && this.grid[row][col-1] == undefined){
-                    this.grid[row][col-1] = Bit(row, col-1, 1, 'black');
-                    this.updateNeighborForOneCell(row, col-1);  // need to be adjusted
-                }
-                else if (col < (this.nD -1) && this.grid[row][col+1] == undefined){
-                   this.grid[row][col+1] = Bit(row, col+1, 1, 'black');
-                    this.updateNeighborForOneCell(row, col+1);  // need to be adjuste 
-                }
             }
-
         }
         
         return this.grid;
@@ -106,14 +79,22 @@ var app = angular.module('myApp', []);
     this.updateNeighborsArrayForBonus = function(row, col, neighborRow, neighborCol, bitValue){
         if (neighborRow >= 0 && neighborRow < this.mD 
             && neighborCol >= 0 && neighborCol < this.nD ){
-            
-            if (this.grid[row][col].bit == 1){
+            if (this.grid[neighborRow][neighborCol] == undefined){
+                return;
+            }
+            if (bitValue == 1){
                 this.grid[neighborRow][neighborCol].coloredConnectedNeighbors.push({i: row, j:col});
+                this.grid[row][col].coloredConnectedNeighbors.push({i: neighborRow, j: neighborCol});
+                
             }else{  // bit value is 0 - we need to remove this cell from it's neighbors
-                var index = this.grid[neighborRow][neighborCol].coloredConnectedNeighbors.indexOf({i: row, j: col});
-                if (index > -1){
-                    this.grid[neighborRow][neighborCol].coloredConnectedNeighbors.splice(index, 1);
+                for (var index =0; index < this.grid[neighborRow][neighborCol].coloredConnectedNeighbors.length; index++){
+                    var pair = this.grid[neighborRow][neighborCol].coloredConnectedNeighbors[index];
+                    if (pair.i == row && pair.j == col){
+                        this.grid[neighborRow][neighborCol].coloredConnectedNeighbors.splice(index, 1);
+                        break;
+                    }
                 }
+
             }
                  
         }
@@ -121,18 +102,16 @@ var app = angular.module('myApp', []);
     
     //run for each of the cell neighbors
     this.updateNeighborForBonus = function(row, col, bitValue){
-        if (this.grid[row][col].bit == 1){ 
-            this.updateNeighborsArrayForBonus(row, col, row-1, col-1, bitValue);
-            this.updateNeighborsArrayForBonus(row, col, row-1, col, bitValue);
-            this.updateNeighborsArrayForBonus(row, col, row-1, col+1, bitValue);
+        this.updateNeighborsArrayForBonus(row, col, row-1, col-1, bitValue);
+        this.updateNeighborsArrayForBonus(row, col, row-1, col, bitValue);
+        this.updateNeighborsArrayForBonus(row, col, row-1, col+1, bitValue);
 
-            this.updateNeighborsArrayForBonus(row, col, row, col-1, bitValue);
-            this.updateNeighborsArrayForBonus(row, col, row, col+1, bitValue);
+        this.updateNeighborsArrayForBonus(row, col, row, col-1, bitValue);
+        this.updateNeighborsArrayForBonus(row, col, row, col+1, bitValue);
 
-            this.updateNeighborsArrayForBonus(row, col, row+1, col-1, bitValue);
-            this.updateNeighborsArrayForBonus(row, col, row+1, col, bitValue);
-            this.updateNeighborsArrayForBonus(row, col, row+1, col+1, bitValue);
-        }
+        this.updateNeighborsArrayForBonus(row, col, row+1, col-1, bitValue);
+        this.updateNeighborsArrayForBonus(row, col, row+1, col, bitValue);
+        this.updateNeighborsArrayForBonus(row, col, row+1, col+1, bitValue);
     }
     
     this.getUpdatedGrid = function(){
@@ -148,12 +127,14 @@ var app = angular.module('myApp', []);
                     continue;
                 }
                 var currentBit = this.grid[row][col];
-                
-                if (currentBit.bit == 1 && currentBit.htmlColor == 'black'){ // not black means - already been colored before
+//                currentBit.bit == 1 && 
+                if (currentBit.htmlColor == 'black'){ // not black means - already been colored before
                     var color = this.generateRandomColor();
                     currentBit.htmlColor = color;
                     this.numberOfIsland++;
-                    this.paintNeighbors(color, currentBit.coloredConnectedNeighbors); 
+                    if (currentBit.coloredConnectedNeighbors.length>0){
+                        this.paintNeighbors(color, currentBit.coloredConnectedNeighbors);
+                    }
                 }
             }
         }
@@ -163,6 +144,7 @@ var app = angular.module('myApp', []);
     
     //changed the color of the cells in the same island to be the selected random color of the first cell
     this.paintNeighbors = function(newColor, neighbors){
+        
         for (var index = 0; index < neighbors.length; index++){
             
             var pair = neighbors[index];
@@ -188,13 +170,12 @@ var app = angular.module('myApp', []);
     
     //flip the bit value - by click on the bonus map
     this.flipBit = function(row, col){
-        if (this.grid[row][col].bit == 0){
-            this.grid[row][col].bit = 1;
-            this.grid[row][col].htmlColor = 'black';
+        if (this.grid[row][col] == undefined){
+            this.grid[row][col] = Bit(row, col, 1, 'black');
             this.updateNeighborForBonus(row, col, 1);
+            
         }else{  //bit is 1
-            this.grid[row][col].bit = 0;
-            this.grid[row][col].htmlColor = 'white';
+            this.grid[row][col] = undefined;
             this.updateNeighborForBonus(row, col, 0);
         }
         
